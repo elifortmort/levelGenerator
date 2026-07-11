@@ -50,11 +50,13 @@ class AnimatedPlayer(pygame.sprite.Sprite):
         # Required Pygame Sprite attributes
         self.base_image = self.animations[self.current_state][int(self.frame_index)]
         self.image = self.base_image
-        self.rect = self.image.get_rect(topleft=(100, 100))
+        self.rect = pygame.FRect(100, 100, 16, 16) # self.image.get_rect(topleft=(100, 100))
+        self.fall_check = pygame.FRect(100, 100, 16, 8)
 
         self.pos = pygame.Vector2(self.rect.topleft)
         self.velocity = pygame.Vector2(0, 0)
         self.speed = 100.0 # Pixels per second
+        self.is_falling = False
 
     def change_state(self, new_state):
         """Safely switch to a new animation type."""
@@ -68,12 +70,20 @@ class AnimatedPlayer(pygame.sprite.Sprite):
         if self.velocity.length() > 0:
             # Normalize vector to prevent faster diagonal movement
             self.pos += self.velocity.normalize() * self.speed * dt
-            self.change_state("walk")
+            if self.velocity.y > 0:
+                self.change_state("falling")
+                self.is_falling = True
+            elif self.velocity.y < 0:
+                self.change_state("falling")
+                self.is_falling = False
+            elif self.velocity.x != 0:
+                self.change_state("walk")
         else:
             self.change_state("idle")
 
         # Bind the sprite's collision rect to the floating position
         self.rect.topleft = (round(self.pos.x), round(self.pos.y))
+        self.fall_check.bottomleft = (round(self.pos.x), round(self.pos.y+16))
 
         # 2. Advance the animation frames
         current_frames = self.animations[self.current_state]

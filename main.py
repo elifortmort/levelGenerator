@@ -1,5 +1,6 @@
 import pygame
 from sprite import AnimatedPlayer
+from collisions import collisions
 
 # 1. Initialize all Pygame modules
 pygame.init()
@@ -15,19 +16,10 @@ all_sprites = pygame.sprite.Group()
 player = AnimatedPlayer("guySheet.png")
 all_sprites.add(player)
 
-# anim state
-class anim_state():
-    IDLE = "idle"
-    MOVING = "moving"
-    FALLING = "falling"
-
-# Character object
-class character:
-    def __init__(self):
-        self.x_pos = 0
-        self.y_pos = 0
-        self.dead = False
-        self.state = anim_state.IDLE
+obstacles = [
+    pygame.FRect(100, 200, 200, 50),
+    pygame.FRect(500, 250, 50, 200)
+]
 
 # Game state variable
 running = True
@@ -44,10 +36,18 @@ while running:
         # Check if the user clicked the window's close (X) button
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if player.is_falling == False:
+                if event.key == pygame.K_SPACE:
+                    pass
+                    
     
     # Reset movement vector every frame
     player.velocity.x = 0
-    player.velocity.y = 0
+    if player.is_falling == True:
+        player.velocity.y = 1
+    elif player.is_falling == False:
+        player.velocity.y = 0
 
 
     # continous action
@@ -63,11 +63,14 @@ while running:
     if keys[pygame.K_UP] or keys[pygame.K_w]:
         player.velocity.y = -1
     elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-        player.velocity.y = 1
+        if player.is_falling == False:
+            player.is_falling = True
 
 
     # --- GAME LOGIC ---
     # (Update positions, check collisions, etc. go here)
+    collisions(player, player.velocity.x, player.velocity.y, obstacles)
+
 
     all_sprites.update(dt)
 
@@ -76,6 +79,8 @@ while running:
     screen.fill((40, 44, 52))
 
     # Draw a simple test circle: (surface, color, center_coordinates, radius)
+    for wall in obstacles:
+        pygame.draw.rect(screen, (200, 50, 50), wall)
     all_sprites.draw(screen)
 
     # Refresh the visible display buffer to show changes
