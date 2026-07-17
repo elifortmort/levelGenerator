@@ -1,5 +1,4 @@
 import pygame
-from sprite import AnimatedPlayer
 from walls import Wall
 from player import Player
 
@@ -16,7 +15,8 @@ clock = pygame.time.Clock()
 walls = pygame.sprite.Group()
 
 wall_layouts = [
-    (100, 200, 200, 50),
+    (50, 200, 200, 50),
+    (350, 200, 50, 50),
     (500, 250, 50, 200)
 ]
 
@@ -44,11 +44,17 @@ while running:
         # Check if the user clicked the window's close (X) button
         if event.type == pygame.QUIT:
             running = False
-
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+        if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and player.can_jump == True:
+                    player.jump()
+            
 
 
     # continous action
-    keys = pygame.key.get_pressed()
+    #keys = pygame.key.get_pressed()
     
 
 
@@ -66,9 +72,10 @@ while running:
     
     all_sprites.draw(screen)
 
+    pygame.draw.rect(screen, (255, 0, 0), player.grounded)
+
     # Refresh the visible display buffer to show changes
     pygame.display.flip()
-
     
 
 # Clean up and close the window safely when exiting the loop

@@ -61,16 +61,18 @@ class AnimatedPlayer(pygame.sprite.Sprite):
         """animation updates."""
         # 1. Update position based on velocity and delta time
         if velocity.length() > 0:
+            if velocity.x > 0:
+                self.flip_x = False
+            elif velocity.x < 0:
+                self.flip_x = True
             if velocity.y > 0:
                 self.change_state("falling")
             elif velocity.y < 0:
                 self.change_state("falling")
             elif velocity.x > 0:
                 self.change_state("walk")
-                self.flip_x = False
             elif velocity.x < 0:
                 self.change_state("walk")
-                self.flip_x = True
         else:
             self.change_state("idle")
 
