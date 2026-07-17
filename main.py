@@ -1,5 +1,5 @@
 import pygame
-from walls import Wall
+from tiles import Tile
 from player import Player
 
 # 1. Initialize all Pygame modules
@@ -15,13 +15,13 @@ clock = pygame.time.Clock()
 walls = pygame.sprite.Group()
 
 wall_layouts = [
-    (50, 200, 200, 50),
-    (350, 200, 50, 50),
-    (500, 250, 50, 200)
+    ((0, 0), 100, 200),
+    ((16, 0), 116, 200),
+    ((32, 0), 132, 200)
 ]
 
-for x, y, width, height in wall_layouts:
-    wall_element = Wall(x, y, width, height)
+for tile, x, y in wall_layouts:
+    wall_element = Tile(tile, x, y)
     walls.add(wall_element)
 
 all_sprites = pygame.sprite.Group()
@@ -71,8 +71,6 @@ while running:
     # drawing(surface, color, center_coordinates, radius)
     
     all_sprites.draw(screen)
-
-    pygame.draw.rect(screen, (255, 0, 0), player.grounded)
 
     # Refresh the visible display buffer to show changes
     pygame.display.flip()
