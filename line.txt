@@ -1,0 +1,10 @@
+line
+lin
+li    l     line
+n
+---------    -----
+l    l      l
+l   ll     ne
+l         ine
+line     line
+------------------

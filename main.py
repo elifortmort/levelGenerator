@@ -1,31 +1,36 @@
 import pygame
-from tiles import Tile
+from tiles import Tile, LevelGen
 from player import Player
+
 
 # 1. Initialize all Pygame modules
 pygame.init()
 
+
+
 # 2. Set up the game window (Width, Height)
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((800, 400))
+level = LevelGen("line.txt")
+ratio = level.longest / len(level.lines)
+width = 1200
+height = width / ratio
+canvas = pygame.Surface((level.longest*16, len(level.lines)*16))
+screen = pygame.display.set_mode((width, height))
+
+
 pygame.display.set_caption("Ultimater: Green Star North")
 
 # 3. Create a clock tracking object to control frame rate
 clock = pygame.time.Clock()
 
+# creating and adding collision to the sprite group
 walls = pygame.sprite.Group()
+for t in level.tiles:
+     walls.add(t)
 
-wall_layouts = [
-    ((0, 0), 100, 200),
-    ((16, 0), 116, 200),
-    ((32, 0), 132, 200)
-]
-
-for tile, x, y in wall_layouts:
-    wall_element = Tile(tile, x, y)
-    walls.add(wall_element)
 
 all_sprites = pygame.sprite.Group()
-player = Player((100, 100), walls=walls)
+player = Player((64, 48), walls=walls)
 all_sprites.add(walls)
 all_sprites.add(player)
 
@@ -66,13 +71,16 @@ while running:
 
     # --- DRAWING / RENDERING ---
     # Clear the screen with a background color (RGB format)
-    screen.fill((40, 44, 52))
+    canvas.fill((40, 44, 52))
 
     # drawing(surface, color, center_coordinates, radius)
-    
-    all_sprites.draw(screen)
+    #pygame.draw.rect(canvas, (255, 0, 0), player.grounded) drawing the grounding element of player
+    all_sprites.draw(canvas)
 
     # Refresh the visible display buffer to show changes
+    modded_screen = pygame.transform.scale(canvas, (width, height))
+    screen.blit(modded_screen, (0, 0))
+
     pygame.display.flip()
     
 

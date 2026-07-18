@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         
         # 2. Setup physics boundaries and start position
         self.rect = self.image.get_rect(topleft=position)
-        self.grounded = pygame.Rect(position[0], position[1]+16, 16, 2)
+        self.grounded = pygame.Rect(position[0], position[1]+16, 16, 1)
         
         
         
@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         # 4. Movement variables
         self.velocity = pygame.Vector2(0, 0)
         self.gravity = 0.2
-        self.speed = 3
+        self.speed = 2
         self.is_grounded = False
         self.can_jump = True
         self.is_jumping = False
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         """
     def jump(self):
         self.is_jumping = True
-        self.velocity.y = -3
+        self.velocity.y = -3.5
         self.can_jump = False
 
     def update(self, dt):
@@ -83,11 +83,10 @@ class Player(pygame.sprite.Sprite):
             self.can_jump = False
 
         # moving the grounding rect with the character
-        self.grounded.x += self.velocity.x
-        self.grounded.y += self.velocity.y
 
         # handle horizontal movement and collisions
         self.rect.x += self.velocity.x
+        self.grounded.x = self.rect.x
         for wall in pygame.sprite.spritecollide(self, self.walls, False):
             if self.velocity.x > 0:    # Moving right, hit left side of wall
                 self.rect.right = wall.rect.left
@@ -98,14 +97,14 @@ class Player(pygame.sprite.Sprite):
         
         # handle vertical movement and collisions
         self.rect.y += self.velocity.y
+        self.grounded.y = self.rect.y + 16
         for wall in pygame.sprite.spritecollide(self, self.walls, False):
             if self.velocity.y > 0:    # Moving down, hit top of wall
                 self.rect.bottom = wall.rect.top
-                self.grounded.bottom = wall.rect.top + 2
                 
             elif self.velocity.y < 0:  # Moving up, hit bottom of wall
                 self.rect.top = wall.rect.bottom
-                self.grounded.top = wall.rect.bottom + 16
+                self.velocity.y = 0
         
         
         # updating the frame of the animation
