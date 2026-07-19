@@ -1,10 +1,10 @@
-line
-lin
-li    l     line
-n
+line       lll
+lin   l    lll
+lin  lin   el  ine
+n     i      l
 ---------    -----
 l    l      l
-l   ll     ne
-l         ine
-line     line
+l   ll     nen
+l         ineni
+l ne     linenil
 ------------------
