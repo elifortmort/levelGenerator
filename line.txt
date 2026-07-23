@@ -1,10 +1,10 @@
-line       lll
-lin   l    lll
-lin  lin   el  ine
-n     i      l
----------    -----
-l    l      l
-l   ll     nen
-l         ineni
-l ne     linenil
-------------------
+gggg       ggg
+g g   g    ggg   c
+ggg  ggg   gg  ggg
+gc    g      g p
+ggggggggg    ggggg
+g   cg      g
+g   gg     ggg
+g         gg
+g gg   f     ggg
+gggggggggggggggggg

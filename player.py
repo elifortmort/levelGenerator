@@ -2,7 +2,7 @@ import pygame
 from sprite import AnimatedPlayer
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, walls):
+    def __init__(self, position, walls, coins, goal):
         super().__init__()
 
         # 1. Setup appearance
@@ -11,12 +11,14 @@ class Player(pygame.sprite.Sprite):
         
         # 2. Setup physics boundaries and start position
         self.rect = self.image.get_rect(topleft=position)
-        self.grounded = pygame.Rect(position[0], position[1]+16, 16, 1)
+        self.grounded = pygame.Rect(position[0]+1, position[1]+16, 14, 1)
         
         
         
         # 3. Store the reference to the walls group for collision checks
         self.walls = walls
+        self.coins = coins
+        self.goal = goal
         
         # 4. Movement variables
         self.velocity = pygame.Vector2(0, 0)
@@ -25,6 +27,11 @@ class Player(pygame.sprite.Sprite):
         self.is_grounded = False
         self.can_jump = True
         self.is_jumping = False
+
+        # 5. Score
+        self.score = 0
+        self.font = pygame.font.Font(None, 16)
+        self.score_text = self.font.render(f"Coins: {self.score}", False, (255, 0, 0))
 
     def get_input(self):
         """Reads keyboard input to set player direction and speed."""
@@ -84,9 +91,19 @@ class Player(pygame.sprite.Sprite):
 
         # moving the grounding rect with the character
 
+        for goal in pygame.sprite.spritecollide(self, self.goal, False):
+            if goal.animPlayer.fin == True:
+                print("winner")
+            else:
+                print("not yet silly")
+
+        for coin in pygame.sprite.spritecollide(self, self.coins, True):
+            self.score += 1
+            self.score_text = self.font.render(f"Coins: {self.score}", False, (255, 0, 0))
+
         # handle horizontal movement and collisions
         self.rect.x += self.velocity.x
-        self.grounded.x = self.rect.x
+        self.grounded.x = self.rect.x + 1
         for wall in pygame.sprite.spritecollide(self, self.walls, False):
             if self.velocity.x > 0:    # Moving right, hit left side of wall
                 self.rect.right = wall.rect.left

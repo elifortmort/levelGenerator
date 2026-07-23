@@ -1,5 +1,5 @@
 import pygame
-from tiles import Tile, LevelGen
+from tiles import LevelGen
 from player import Player
 
 
@@ -28,10 +28,19 @@ walls = pygame.sprite.Group()
 for t in level.tiles:
      walls.add(t)
 
+coins = pygame.sprite.Group()
+for c in level.coins:
+     coins.add(c)
+
+goal = pygame.sprite.Group()
+flag = level.flag
+goal.add(flag)
 
 all_sprites = pygame.sprite.Group()
-player = Player((64, 48), walls=walls)
+player = Player(level.playerPos, walls=walls, coins=coins, goal=goal)
 all_sprites.add(walls)
+all_sprites.add(coins)
+all_sprites.add(goal)
 all_sprites.add(player)
 
 # Game state variable
@@ -66,6 +75,8 @@ while running:
     # --- GAME LOGIC ---
     # (Update positions, check collisions, etc. go here)
     all_sprites.update(dt)
+    if player.score == len(level.coins):
+        level.flag.animPlayer.fin = True
 
 
 
@@ -74,8 +85,10 @@ while running:
     canvas.fill((40, 44, 52))
 
     # drawing(surface, color, center_coordinates, radius)
-    #pygame.draw.rect(canvas, (255, 0, 0), player.grounded) drawing the grounding element of player
+    # pygame.draw.rect(canvas, (255, 0, 0), player.grounded) # drawing the grounding element of player
+    
     all_sprites.draw(canvas)
+    canvas.blit(player.score_text, (0, 0))
 
     # Refresh the visible display buffer to show changes
     modded_screen = pygame.transform.scale(canvas, (width, height))

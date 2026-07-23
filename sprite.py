@@ -27,6 +27,85 @@ class SpriteSheet:
 
 
 
+class AnimatedFlag(pygame.sprite.Sprite):
+    def __init__(self, sprite_sheet_path):
+        super().__init__()
+        self.ss = SpriteSheet(sprite_sheet_path)
+        self.off = SpriteSheet("flagOff.png")
+        
+        self.animations = {
+            "off": self.off.load_strip(0, 0, 14, 15, 1),
+            "on": self.ss.load_strip(x=0, y=0, width=14, height=15, frame_count=4),
+        }
+        
+        self.current_state = "off"
+        self.frame_index = 0.0
+        self.animation_speed = 4.0 # Higher numbers mean faster animation
+
+        self.fin = False
+        
+        # Required Pygame Sprite attributes
+        self.base_image = self.animations[self.current_state][int(self.frame_index)]
+        self.image = self.base_image
+
+    def change_state(self, new_state):
+            """Safely switch to a new animation type."""
+            if self.current_state != new_state:
+                self.current_state = new_state
+                self.frame_index = 0.0
+
+    def update(self, dt=1.0):
+        """animation updates."""
+
+        if self.fin == True:
+            self.change_state("on")
+        else:
+            self.change_state("off")
+
+        # 2. Advance the animation frames
+        current_frames = self.animations[self.current_state]
+        
+        # Increment index frame using delta time or animation speed
+        self.frame_index += self.animation_speed * dt
+        
+        # Loop animation back to the start frame if it exceeds the maximum
+        if self.frame_index >= len(current_frames):
+            self.frame_index = 0.0
+            
+        # Get the standard, forward-facing frame
+        self.base_image = current_frames[int(self.frame_index)]
+        self.image = self.base_image
+
+
+
+class AnimatedCoin(pygame.sprite.Sprite):
+    def __init__(self, sprite_sheet_path):
+        super().__init__()
+        self.ss = SpriteSheet(sprite_sheet_path)
+        
+        
+        self.current_state = self.ss.load_strip(x=0, y=0, width=10, height=16, frame_count=4)
+        self.frame_index = 0.0
+        self.animation_speed = 4.0 # Higher numbers mean faster animation
+        
+        # Required Pygame Sprite attributes
+        self.image = self.current_state[int(self.frame_index)]
+
+    def update(self, dt=1.0):
+        """animation updates."""
+
+        # 2. Advance the animation frames
+        current_frames = self.current_state
+        
+        # Increment index frame using delta time or animation speed
+        self.frame_index += self.animation_speed * dt
+        
+        # Loop animation back to the start frame if it exceeds the maximum
+        if self.frame_index >= len(current_frames):
+            self.frame_index = 0.0
+            
+        # Get the standard, forward-facing frame
+        self.image = current_frames[int(self.frame_index)]
 
 
 
