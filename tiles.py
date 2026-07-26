@@ -40,7 +40,7 @@ class LevelGen:
         self.tiles = []
         self.playerPos = (0, 0)
         self.coins = []
-        self.flag = None
+        self.flag = Flag(0, 0)
 
         # storing level
         with open(self.text, "r", encoding="utf-8") as file:

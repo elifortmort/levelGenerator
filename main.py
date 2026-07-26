@@ -11,8 +11,10 @@ pygame.init()
 # 2. Set up the game window (Width, Height)
 screen = pygame.display.set_mode((800, 400))
 level = LevelGen("line.txt")
+width = 800
+if level.longest <= 0 or len(level.lines) <= 0:
+    raise ZeroDivisionError("The level must have a height and width of more than zero")
 ratio = level.longest / len(level.lines)
-width = 1200
 height = width / ratio
 canvas = pygame.Surface((level.longest*16, len(level.lines)*16))
 screen = pygame.display.set_mode((width, height))
