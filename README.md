@@ -13,6 +13,8 @@ prerequisites to run this project:
 -- Editing the level --
   -
 
+To edit the level, just edit line.txt
+
 Symbols:
   - p, player
   - f, flag
