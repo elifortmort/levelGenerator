@@ -5,22 +5,23 @@ This project is a simple text-to-level generator with assets that I made.
 The levels are simple ground tiles that visually connect to each other, a player, collectibles and a goal. 
 This project was put together for educational purposes.
 
-prerequisites to run this project:
+Rrerequisites to run this project:
   - python3
   - pygame ce
-  
 
+  
 -- Editing the level --
   -
 
-To edit the level, just edit line.txt
+To edit the level, edit line.txt
 
 Symbols:
   - p, player
   - f, flag
   - c, coin
   - g, ground
-  - spaces and not indentations to for open area
+  - spaces and not indentations for open area
 
 The text must contain at least one symbol to run (one by one).
 The game is to collect all the coins to unlock the goal.
+To close press escape.
